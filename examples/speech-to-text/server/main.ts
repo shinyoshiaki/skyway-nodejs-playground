@@ -1,16 +1,19 @@
 import {
-  RemoteVideoStream,
+  RemoteAudioStream,
   SkyWayContext,
   SkyWayRoom,
-  dePacketizeRtpPackets,
 } from "@shinyoshiaki/skyway-nodejs-sdk";
-import { testTokenString } from "./fixture";
-import Gst from "@girs/node-gst-1.0";
+import { testTokenString } from "./const";
+import { SessionFactory } from "rtp2text";
 
-const gst = require("node-gtk").require("Gst", "1.0") as typeof Gst;
-gst.init([]);
+const factory = new SessionFactory({ modelPath: __dirname + "/vosk-model" });
 
 (async () => {
+  const s2t = await factory.create();
+  s2t.onText.subscribe((text) => {
+    console.log(text);
+  });
+
   const context = await SkyWayContext.Create(testTokenString);
   const room = await SkyWayRoom.Create(context, {
     type: "sfu",
@@ -19,14 +22,15 @@ gst.init([]);
   const receiver = await room.join();
 
   room.onStreamPublished.add(async (e) => {
+    if (e.publication.contentType !== "audio") {
+      return;
+    }
+
     const { stream: remoteStream } =
-      await receiver.subscribe<RemoteVideoStream>(e.publication);
+      await receiver.subscribe<RemoteAudioStream>(e.publication);
 
     remoteStream.track.onReceiveRtp.subscribe((rtp) => {
-      const codec = dePacketizeRtpPackets("vp8", [rtp]);
-      if (codec.isKeyframe) {
-        console.log("keyframe");
-      }
+      s2t.inputRtp(rtp);
     });
   });
 })();

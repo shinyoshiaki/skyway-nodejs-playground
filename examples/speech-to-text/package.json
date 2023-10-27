@@ -4,14 +4,22 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "dotenv": "^16.3.1",
     "@shinyoshiaki/skyway-nodejs-sdk": "^1.6.2",
     "node-gtk": "file:../../submodules/node-gtk",
-    "@girs/node-gst-1.0": "^1.23.0-3.2.2"
+    "@girs/node-gst-1.0": "^1.23.0-3.2.2",
+    "rtp2text": "^0.0.1",
+    "@skyway-sdk/room": "^1.6.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "cp ../../.env .env && parcel client/index.html",
+    "server": "ts-node-dev server/main.ts"
   },
   "repository": {
     "type": "git",
