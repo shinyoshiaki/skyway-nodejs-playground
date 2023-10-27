@@ -8,10 +8,10 @@ import { testTokenString } from "./const";
 import { Audio2Rtp } from "audio2rtp";
 import { VoicevoxClient } from "@shinyoshiaki/voicevox-client";
 
-const client = new VoicevoxClient();
+const voice = new VoicevoxClient();
 
 (async () => {
-  const audio = await Audio2Rtp.Create();
+  const rtpSource = await Audio2Rtp.Create();
 
   const context = await SkyWayContext.Create(testTokenString);
   const room = await SkyWayRoom.Create(context, {
@@ -21,7 +21,7 @@ const client = new VoicevoxClient();
   const sender = await room.join();
 
   const track = new MediaStreamTrack({ kind: "audio" });
-  audio.onRtp.subscribe((rtp) => {
+  rtpSource.onRtp.subscribe((rtp) => {
     track.writeRtp(rtp);
   });
 
@@ -31,9 +31,9 @@ const client = new VoicevoxClient();
   });
 
   for (;;) {
-    const res = await client.speak("マイクのテスト中");
-    await audio.inputWav(res);
+    const res = await voice.speak("テキストを読み上げ中");
+    await rtpSource.inputWav(res);
 
-    await new Promise((r) => setTimeout(r, 5000));
+    await new Promise((r) => setTimeout(r, 2000));
   }
 })();

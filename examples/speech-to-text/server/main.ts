@@ -6,7 +6,8 @@ import {
 import { testTokenString } from "./const";
 import { SessionFactory } from "rtp2text";
 
-const factory = new SessionFactory({ modelPath: __dirname + "/vosk-model" });
+const modelPath = __dirname + "/vosk-model";
+const factory = new SessionFactory({ modelPath });
 
 (async () => {
   const s2t = await factory.create();
@@ -28,7 +29,7 @@ const factory = new SessionFactory({ modelPath: __dirname + "/vosk-model" });
 
     const { stream: remoteStream } =
       await receiver.subscribe<RemoteAudioStream>(e.publication);
-
+    console.log("subscribed");
     remoteStream.track.onReceiveRtp.subscribe((rtp) => {
       s2t.inputRtp(rtp);
     });

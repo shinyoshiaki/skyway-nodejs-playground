@@ -19,15 +19,13 @@
     "voicevox": "zx scripts/voicevox.mjs"
   },
   "dependencies": {
-    "@girs/node-gst-1.0": "^1.23.0-3.2.2",
     "@shinyoshiaki/skyway-nodejs-sdk": "^1.6.2",
-    "@shinyoshiaki/voicevox-client": "^0.0.1",
+    "@shinyoshiaki/voicevox-client": "^0.0.2",
     "@skyway-sdk/room": "^1.6.1",
-    "audio2rtp": "^0.0.1",
+    "audio2rtp": "^0.0.2",
     "dotenv": "^16.3.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rtp2text": "^0.0.1"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.33",
